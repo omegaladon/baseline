@@ -8,10 +8,7 @@ public abstract class LoggedClass {
 
     public void register(LoggedClass loggedClass) {
         if (classIsRegistered) {
-            throw new IllegalStateException("This class is already registered to be logged!");
-        }
-        if (Baseline.isPresent(loggedClass)) {
-            throw new IllegalStateException("This class is already registered to be logged!");
+            throw new IllegalStateException(loggedClass.getClass().getSimpleName() + " is already registered to be logged.");
         }
         classIsRegistered = true;
 
@@ -22,6 +19,7 @@ public abstract class LoggedClass {
                 Baseline.add(loggedClass, field, loggedObject);
             }
         }
+        Baseline.findId(loggedClass);
     }
 
 }
