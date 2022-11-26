@@ -1,6 +1,5 @@
 package me.omega;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +7,10 @@ import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+/**
+ * The main class for Baseline.
+ * @author omega
+ */
 public class Baseline {
 
     protected static final HashMap<LoggedClass, HashMap<Field, LoggedObject>> fieldMap = new HashMap<>();
@@ -17,6 +20,9 @@ public class Baseline {
     private static boolean hasStarted = false;
     private static boolean debug;
 
+    /**
+     * Sets the debug mode for Baseline.
+     */
     public static void setDebug(boolean debug) {
         Baseline.debug = debug;
     }
@@ -38,20 +44,30 @@ public class Baseline {
         idMap.put(loggedClass, count);
     }
 
+    /**
+     * Adds a LogType to Baseline.
+     * You can create your own LogType by implementing the LogType interface. Read more about it <a href="https://github.com/omegaladon/baseline">here</a>.
+     */
     public static void addLogType(LogType... type) {
         Collections.addAll(logTypes, type);
     }
 
+    /**
+     * Prints out various debugging information.
+     */
     public static void debug() {
         System.out.println("Debugging...");
         for (LoggedClass loggedClass : fieldMap.keySet()) {
             for (Field field : fieldMap.get(loggedClass).keySet()) {
                 LoggedObject loggedObject = fieldMap.get(loggedClass).get(field);
-                System.out.println("[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Registered " + loggedClass.getClass().getSimpleName() + "." + field.getName() + " with baseline " + loggedObject.getBaseline() + " and allowed deviation " + loggedObject.getAllowedDeviation());
+                System.out.println("[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Registered " + loggedClass.getClass().getSimpleName() + "." + field.getName() + " with baseline " + loggedObject.baseline() + " and allowed deviation " + loggedObject.allowedDeviation());
             }
         }
     }
 
+    /**
+     * Starts Baseline. This can only be run once.
+     */
     public static void start() {
         if (logTypes.isEmpty()) {
             throw new IllegalStateException("No LogTypes have been added. Add a LogType with Baseline.addLogType(LogType type)");
@@ -71,8 +87,8 @@ public class Baseline {
                     try {
                         field.setAccessible(true);
                         double value = field.getDouble(loggedClass);
-                        if (value > loggedObject.getBaseline() + loggedObject.getAllowedDeviation() || value < loggedObject.getBaseline() - loggedObject.getAllowedDeviation()) {
-                            String message = "[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Value " + field.getName() + " recorded " + value + " which is outside of the allowed deviation of " + loggedObject.getAllowedDeviation() + " from the baseline of " + loggedObject.getBaseline();
+                        if (value > loggedObject.baseline() + loggedObject.allowedDeviation() || value < loggedObject.baseline() - loggedObject.allowedDeviation()) {
+                            String message = "[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Value " + field.getName() + " recorded " + value + " which is outside of the allowed deviation of " + loggedObject.allowedDeviation() + " from the baseline of " + loggedObject.baseline();
                             for (LogType logType : logTypes) {
                                 logType.log(message);
                             }

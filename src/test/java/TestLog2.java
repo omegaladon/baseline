@@ -1,4 +1,5 @@
-package me.omega;
+import me.omega.Log;
+import me.omega.LoggedClass;
 
 public class TestLog2 extends LoggedClass {
 

@@ -1,5 +1,4 @@
-package me.omega;
-
+import me.omega.Baseline;
 import me.omega.impl.SystemLogType;
 
 public class Test {
