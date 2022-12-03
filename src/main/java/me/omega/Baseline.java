@@ -77,6 +77,10 @@ public class Baseline {
         }
         hasStarted = true;
 
+        for (LogType logType : logTypes) {
+            logType.setup();
+        }
+
         if (debug) debug();
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -91,6 +95,7 @@ public class Baseline {
                             String message = "[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Value " + field.getName() + " recorded " + value + " which is outside of the allowed deviation of " + loggedObject.allowedDeviation() + " from the baseline of " + loggedObject.baseline();
                             for (LogType logType : logTypes) {
                                 logType.log(message);
+                                logType.log(loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass), value, loggedObject);
                             }
                         }
                     } catch (IllegalAccessException e) {
@@ -99,6 +104,14 @@ public class Baseline {
                 }
             }
         }, 0, 5, java.util.concurrent.TimeUnit.SECONDS);
+    }
+
+    protected HashMap<LoggedClass, HashMap<Field, LoggedObject>> getFieldMap() {
+        return fieldMap;
+    }
+
+    protected HashMap<LoggedClass, Integer> getIdMap() {
+        return idMap;
     }
 
 }

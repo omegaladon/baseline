@@ -1,3 +1,3 @@
 package me.omega;
 
-record LoggedObject(double baseline, double allowedDeviation) {}
+public record LoggedObject(double baseline, double allowedDeviation) {}

@@ -7,15 +7,6 @@ import me.omega.LogType;
  * <pre>
  *     System.err.println(message)
  * </pre>
- * Example:
- * <pre>
- * public class SystemLogType implements LogType {
- *     {@code @Override}
- *     public void log(String message) {
- *         System.err.println(message);
- *     }
- * }
- * </pre>
  * @see me.omega.LogType
  */
 public class SystemLogType implements LogType {
