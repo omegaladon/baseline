@@ -5,25 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="435b5225-fbfa-46d3-af5b-5dcaf6e12b8c" name="Changes" comment="Add LICENSE">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/omega/impl/CSVLogType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/omega/object/BaselineObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/omega/object/NestedLoggedObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/Baseline.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/Baseline.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/Log.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/Log.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/LogType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/LogType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/LoggedObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/LoggedObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/impl/SystemLogType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/impl/SystemLogType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/LoggedClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/LoggedClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/LoggedObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/object/LoggedObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/omega/impl/CSVLogType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/omega/impl/CSVLogType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestLog.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -59,7 +65,7 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Java",
+    "settings.editor.selected.configurable": "preferences.editor",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -85,7 +91,7 @@
       <module name="baseline" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="me.omega.*" />
+          <option name="PATTERN" value="me.omega.object.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -111,7 +117,8 @@
       <workItem from="1669490460823" duration="3249000" />
       <workItem from="1670003659086" duration="96000" />
       <workItem from="1670020399119" duration="15000" />
-      <workItem from="1670023567258" duration="3000000" />
+      <workItem from="1670023567258" duration="3242000" />
+      <workItem from="1670345374791" duration="6115000" />
     </task>
     <task id="LOCAL-00001" summary="Add LICENSE">
       <created>1669490976730</created>

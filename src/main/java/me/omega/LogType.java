@@ -1,6 +1,7 @@
 package me.omega;
 
 import me.omega.impl.SystemLogType;
+import me.omega.object.BaselineObject;
 
 /**
  * A type of log that can be used by {@link Baseline} to log data. For an example, see {@link SystemLogType}.
@@ -24,16 +25,6 @@ public interface LogType {
      * @param loggedObject Logged object instance with data on deviation and baseline.
      * @see me.omega.impl.CSVLogType
      */
-    default void log(String field, double value, LoggedObject loggedObject) {}
-
-    /**
-     * Code run when Baseline starts.
-     */
-    default void setup() {}
-
-    /**
-     * Code run when Baseline ends/finishes.
-     */
-    default void finish() {}
+    default void log(String field, double value, BaselineObject loggedObject) {}
 
 }

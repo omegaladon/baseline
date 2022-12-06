@@ -1,5 +1,8 @@
 package me.omega;
 
+import me.omega.object.LoggedObject;
+import me.omega.object.NestedLoggedObject;
+
 import java.lang.reflect.Field;
 
 /**
@@ -34,6 +37,18 @@ public abstract class LoggedClass {
         for (Field field : loggedClass.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Log.class)) {
                 Log log = field.getAnnotation(Log.class);
+                if (log.isNested()) {
+                    for (Field nestedField : field.getType().getDeclaredFields()) {
+                        if (nestedField.isAnnotationPresent(Log.class)) {
+                            Log nestedLog = nestedField.getAnnotation(Log.class);
+                            NestedLoggedObject nestedLoggedObject = new NestedLoggedObject(nestedLog.baseline(), nestedLog.allowedDeviation(), field);
+                            Baseline.add(loggedClass, nestedField, nestedLoggedObject);
+                        }
+                    }
+//                    NestedLoggedObject nestedLoggedObject = new NestedLoggedObject(log.baseline(), log.allowedDeviation());
+//                    Baseline.add(loggedClass, field, nestedLoggedObject);
+                    continue;
+                }
                 LoggedObject loggedObject = new LoggedObject(log.baseline(), log.allowedDeviation());
                 Baseline.add(loggedClass, field, loggedObject);
             }

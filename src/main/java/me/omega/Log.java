@@ -27,10 +27,11 @@ public @interface Log {
     /**
      * The baseline value for the field.
      */
-    double baseline();
+    double baseline() default 0.0;
     /**
      * The allowed deviation from the baseline value.
      */
-    double allowedDeviation();
+    double allowedDeviation() default 0.0;
 
+    boolean isNested() default false;
 }

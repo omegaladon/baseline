@@ -1,5 +1,9 @@
 package me.omega;
 
+import me.omega.object.BaselineObject;
+import me.omega.object.LoggedObject;
+import me.omega.object.NestedLoggedObject;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class Baseline {
 
-    protected static final HashMap<LoggedClass, HashMap<Field, LoggedObject>> fieldMap = new HashMap<>();
+    protected static final HashMap<LoggedClass, HashMap<Field, BaselineObject>> fieldMap = new HashMap<>();
     protected static final HashMap<LoggedClass, Integer> idMap = new HashMap<>();
     protected static final ArrayList<LogType> logTypes = new ArrayList<>();
 
@@ -27,7 +31,7 @@ public class Baseline {
         Baseline.debug = debug;
     }
 
-    protected static void add(LoggedClass loggedClass, Field field, LoggedObject loggedObject) {
+    protected static void add(LoggedClass loggedClass, Field field, BaselineObject loggedObject) {
         if (!fieldMap.containsKey(loggedClass)) {
             fieldMap.put(loggedClass, new HashMap<>());
         }
@@ -59,7 +63,7 @@ public class Baseline {
         System.out.println("Debugging...");
         for (LoggedClass loggedClass : fieldMap.keySet()) {
             for (Field field : fieldMap.get(loggedClass).keySet()) {
-                LoggedObject loggedObject = fieldMap.get(loggedClass).get(field);
+                BaselineObject loggedObject = fieldMap.get(loggedClass).get(field);
                 System.out.println("[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Registered " + loggedClass.getClass().getSimpleName() + "." + field.getName() + " with baseline " + loggedObject.baseline() + " and allowed deviation " + loggedObject.allowedDeviation());
             }
         }
@@ -77,36 +81,60 @@ public class Baseline {
         }
         hasStarted = true;
 
-        for (LogType logType : logTypes) {
-            logType.setup();
-        }
-
         if (debug) debug();
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             for (LoggedClass loggedClass : fieldMap.keySet()) {
                 for (Field field : fieldMap.get(loggedClass).keySet()) {
-                    LoggedObject loggedObject = fieldMap.get(loggedClass).get(field);
-                    try {
-                        field.setAccessible(true);
-                        double value = field.getDouble(loggedClass);
-                        if (value > loggedObject.baseline() + loggedObject.allowedDeviation() || value < loggedObject.baseline() - loggedObject.allowedDeviation()) {
-                            String message = "[" + loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass) + "] Value " + field.getName() + " recorded " + value + " which is outside of the allowed deviation of " + loggedObject.allowedDeviation() + " from the baseline of " + loggedObject.baseline();
-                            for (LogType logType : logTypes) {
-                                logType.log(message);
-                                logType.log(loggedClass.getClass().getSimpleName() + "." + idMap.get(loggedClass), value, loggedObject);
+                    BaselineObject loggedObject = fieldMap.get(loggedClass).get(field);
+                    if (loggedObject instanceof LoggedObject) {
+                        try {
+                            field.setAccessible(true);
+                            double value = field.getDouble(loggedClass);
+                            if (value > loggedObject.baseline() + loggedObject.allowedDeviation() || value < loggedObject.baseline() - loggedObject.allowedDeviation()) {
+                                String message = "[(" + idMap.get(loggedClass) + ") " +  loggedClass.getClass().getSimpleName() + "] Value " + field.getName() + " recorded " + value + " which is outside of the allowed deviation of " + loggedObject.allowedDeviation() + " from the baseline of " + loggedObject.baseline();
+                                for (LogType logType : logTypes) {
+                                    logType.log(message);
+                                    logType.log("(" + idMap.get(loggedClass) + ") " + loggedClass.getClass().getSimpleName(), value, loggedObject);
+                                }
                             }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                    } else if (loggedObject instanceof NestedLoggedObject) {
+                        try {
+                            field.setAccessible(true);
+                            Field object = loggedObject.field();
+                            for (Field nestedField : object.getType().getDeclaredFields()) {
+                                if (!nestedField.getName().equals(field.getName())) continue;
+                                nestedField.setAccessible(true);
+                                Object value = nestedField.get(nestedField.getDeclaringClass());
+                                System.out.println(value);
+//                                double value = nestedField.getDouble(object);
+//                                if (value > loggedObject.baseline() + loggedObject.allowedDeviation() || value < loggedObject.baseline() - loggedObject.allowedDeviation()) {
+//                                    String message = "[(" + idMap.get(loggedClass) + ") " + loggedClass.getClass().getSimpleName() + "." + loggedObject.field().getName() + "." + nestedField.getName() + "] Recorded " + value + " which is outside of the allowed deviation of " + loggedObject.allowedDeviation() + " from the baseline of " + loggedObject.baseline();
+//                                    for (LogType logType : logTypes) {
+//                                        logType.log(message);
+//                                        logType.log("(" + idMap.get(loggedClass) + ") " + loggedClass.getClass().getSimpleName() + "." + field.getName() + "." + nestedField.getName(), value, loggedObject);
+//                                    }
+//                                }
+                            }
+//                        } catch (IllegalAccessException e) {
+//                            throw new RuntimeException(e);
+//                        }
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        } finally {
+
+                        }
                     }
                 }
             }
         }, 0, 5, java.util.concurrent.TimeUnit.SECONDS);
     }
 
-    protected HashMap<LoggedClass, HashMap<Field, LoggedObject>> getFieldMap() {
+    protected HashMap<LoggedClass, HashMap<Field, BaselineObject>> getFieldMap() {
         return fieldMap;
     }
 
