@@ -1,10 +1,10 @@
 package me.omega.baseline.value;
 
-import me.omega.baseline.Baseline;
 import me.omega.baseline.Log;
 import me.omega.baseline.LoggedClass;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public abstract class LoggedValue<T> {
@@ -28,8 +28,18 @@ public abstract class LoggedValue<T> {
         };
     }
 
-    public T get() {
+    public T getValue() {
         return getter.get();
+    }
+
+    // 
+    public String getName() {
+        if (Objects.equals(log.name(), "")) return field.getName();
+        return log.name();
+    }
+
+    public String getClassName() {
+        return loggedClass.toString();
     }
 
 }

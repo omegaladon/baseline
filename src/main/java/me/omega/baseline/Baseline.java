@@ -30,7 +30,7 @@ public class Baseline {
 
     private static ScheduledExecutorService executor;
 
-    public static void addInstance(LoggedClass loggedClass) {
+    public static void addInstance(LoggedClass loggedClass) throws IllegalArgumentException {
         var clazz = loggedClass.getClass();
         if (!cachedFields.containsKey(clazz)) {
             var fields = new ArrayList<Field>();
@@ -58,7 +58,14 @@ public class Baseline {
             } else if (Boolean.class.isAssignableFrom(type) || type.equals(boolean.class)) {
                 values.add(new BooleanLoggedValue(loggedClass, field, log));
             } else {
-                throw new IllegalArgumentException("Unsupported log type: " + type);
+                try {
+                    if (!LoggedClass.class.isAssignableFrom(field.get(loggedClass).getClass())) {
+                        throw new IllegalArgumentException("Unsupported log type: " + type);
+                    }
+                    addInstance((LoggedClass) field.get(loggedClass));
+                } catch (IllegalAccessException e) {
+                    throw new IllegalArgumentException("Unsupported log type: " + type);
+                }
             }
             counter.getAndIncrement();
         });
@@ -83,7 +90,6 @@ public class Baseline {
     private static void init() {
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
-            logger.info("Logging values...");
             try {
                 values.forEach((loggedValue) -> {
                     loggers.forEach((logger) -> logger.log(loggedValue, ""));
