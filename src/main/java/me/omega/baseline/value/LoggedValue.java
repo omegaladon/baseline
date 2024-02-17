@@ -4,15 +4,20 @@ import me.omega.baseline.Log;
 import me.omega.baseline.LoggedClass;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class LoggedValue<T> {
+public class LoggedValue<T> {
 
     public final LoggedClass loggedClass;
     public final Field field;
     public final Log log;
     public final Supplier<T> getter;
+
+    public LoggedValue parent;
 
     public LoggedValue(LoggedClass loggedClass, Field field, Log log) {
         this.loggedClass = loggedClass;
@@ -32,7 +37,6 @@ public abstract class LoggedValue<T> {
         return getter.get();
     }
 
-    // 
     public String getName() {
         if (Objects.equals(log.name(), "")) return field.getName();
         return log.name();
@@ -40,6 +44,37 @@ public abstract class LoggedValue<T> {
 
     public String getClassName() {
         return loggedClass.toString();
+    }
+
+    public String getParentString(Function<List<LoggedValue<?>>, String> transformer) {
+        if (parent == null) return "Root";
+        return transformer.apply(getParentList());
+    }
+
+    public String getParentString() {
+        return getParentString(list -> {
+            var builder = new StringBuilder();
+            for (int i = list.size() - 1; i >= 0; i--) {
+                var value = list.get(i);
+                builder.append(value.getName());
+                if (i != 0) builder.append(" -> ");
+            }
+            return builder.toString();
+        });
+    }
+
+    public List<LoggedValue<?>> getParentList() {
+        var list = new ArrayList<LoggedValue<?>>();
+        var current = parent;
+        while (current != null) {
+            list.add(current);
+            current = current.parent;
+        }
+        return list;
+    }
+
+    public void setParent(LoggedValue parent) {
+        this.parent = parent;
     }
 
 }

@@ -25,7 +25,6 @@ public class Container implements LoggedClass {
         Baseline.setDebug(true);
         Baseline.setInterval(Duration.ofSeconds(1));
         new Container();
-        new Container();
         Baseline.start("me.omega.baseline");
     }
 }
