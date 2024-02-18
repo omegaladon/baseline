@@ -182,8 +182,4 @@ public class Baseline {
         Baseline.interval = interval;
     }
 
-    private static boolean isNumericClass(Class<?> clazz) {
-        return Number.class.isAssignableFrom(clazz) || clazz.equals(byte.class) || clazz.equals(short.class) || clazz.equals(int.class) || clazz.equals(long.class) || clazz.equals(float.class) || clazz.equals(double.class);
-    }
-
 }
