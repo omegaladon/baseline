@@ -158,7 +158,7 @@ public class Baseline {
                 logger.severe("An error occurred while logging values: " + e.getMessage());
                 e.printStackTrace();
             }
-        }, 0, interval.toMillis(), TimeUnit.MILLISECONDS);
+        }, interval.toMillis(), interval.toMillis(), TimeUnit.MILLISECONDS);
     }
 
     public static void addLogger(BaselineLogger logger) {
