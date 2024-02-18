@@ -10,6 +10,6 @@ public interface BaselineLogger {
      *     System.out.println(message);
      * </pre>
      */
-    void log(LoggedValue<?> value, String extra);
+    void log(LoggedValue<?> value);
 
 }

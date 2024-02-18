@@ -149,7 +149,7 @@ public class Baseline {
         executor.scheduleAtFixedRate(() -> {
             try {
                 values.forEach((loggedValue) -> {
-                    loggers.forEach((logger) -> logger.log(loggedValue, ""));
+                    loggers.forEach((logger) -> logger.log(loggedValue));
                 });
             } catch (Exception e) {
                 logger.severe("An error occurred while logging values: " + e.getMessage());
