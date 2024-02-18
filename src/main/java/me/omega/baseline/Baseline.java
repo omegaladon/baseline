@@ -66,13 +66,12 @@ public class Baseline {
 
             try {
                 if (LoggedClass.class.isAssignableFrom(type)) {
-                    list.addAll(addInstance(log, field.getName(), loggedClass, (LoggedClass) field.get(loggedClass),
-                            () -> null));
+                    list.addAll(addInstance(log, field.getName(), loggedClass, (LoggedClass) field.get(loggedClass)));
                 } else {
                     list.add(addValue(log, field.getName(), loggedClass, () -> {
                         try {
                             return field.get(loggedClass);
-                        } catch (IllegalAccessException e) {
+                        } catch (Exception e) {
                             return null;
                         }
                     }));
@@ -90,8 +89,7 @@ public class Baseline {
 
             try {
                 if (LoggedClass.class.isAssignableFrom(type)) {
-                    list.addAll(addInstance(log, method.getName(), loggedClass, (LoggedClass) method.invoke(loggedClass),
-                            () -> null));
+                    list.addAll(addInstance(log, method.getName(), loggedClass, (LoggedClass) method.invoke(loggedClass)));
                 } else {
                     list.add(addValue(log, method.getName(), loggedClass, () -> {
                         try {
@@ -118,20 +116,19 @@ public class Baseline {
     }
 
     private static List<LoggedValue<?>> addInstance(Log log, String name, LoggedClass loggedClass,
-                                                    LoggedClass instance, Supplier<?> getter) throws IllegalStateException {
+                                                    LoggedClass instance) throws IllegalStateException, IllegalArgumentException {
         LoggedClass.class.isAssignableFrom(instance.getClass());
         var value = addInstance(instance);
         value.forEach((loggedValue) -> {
             if (loggedValue.parent != null) return;
-            classValueMap.putIfAbsent(loggedClass, new LoggedValue<>(loggedClass, name, log, getter));
+            classValueMap.putIfAbsent(loggedClass, new LoggedValue<>(loggedClass, name, log, () -> null));
             loggedValue.setParent(
                     classValueMap.get(loggedClass)
             );
         });
         var list = new ArrayList<>(value);
         list.add(
-                classValueMap.computeIfAbsent(loggedClass, (key) -> new LoggedValue<>(loggedClass, name, log,
-                        getter))
+                classValueMap.computeIfAbsent(loggedClass, (key) -> new LoggedValue<>(loggedClass, name, log, () -> null))
         );
         return list;
     }

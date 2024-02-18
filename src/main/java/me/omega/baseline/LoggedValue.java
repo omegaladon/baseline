@@ -14,12 +14,15 @@ public class LoggedValue<T> {
     public final Supplier<T> getter;
 
     public LoggedValue parent;
+    public LogType type;
 
-    public LoggedValue(LoggedClass loggedClass, String name, Log log, Supplier<T> getter) {
+    public LoggedValue(LoggedClass loggedClass, String name, Log log, Supplier<T> getter) throws IllegalArgumentException {
         this.loggedClass = loggedClass;
         this.name = name;
         this.log = log;
         this.getter = getter;
+
+        this.type = LogType.fromObject(getter.get());
     }
 
     public T getValue() {
