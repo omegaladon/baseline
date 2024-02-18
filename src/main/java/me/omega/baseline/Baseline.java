@@ -28,6 +28,7 @@ public class Baseline {
     private static final HashMap<LoggedClass, LoggedValue<?>> classValueMap = new HashMap<>();
     private static final HashMap<Class<?>, ArrayList<Field>> cachedFields = new HashMap<>();
     private static final HashMap<Class<?>, ArrayList<Method>> cachedMethods = new HashMap<>();
+    
     private static final HashSet<BaselineLogger> loggers = new HashSet<>();
 
     private static ScheduledExecutorService executor;
