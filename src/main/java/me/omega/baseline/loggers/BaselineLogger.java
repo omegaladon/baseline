@@ -10,6 +10,11 @@ public interface BaselineLogger {
      *     System.out.println(message);
      * </pre>
      */
-    void log(LoggedValue<?> value);
+    default void log(LoggedValue<?> value) {};
+
+    default void logString(LoggedValue<?> value) {}
+    default void logNumber(LoggedValue<?> value) {}
+    default void logBoolean(LoggedValue<?> value) {}
+    default void logEnum(LoggedValue<?> value) {}
 
 }

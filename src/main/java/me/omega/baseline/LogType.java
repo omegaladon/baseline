@@ -1,19 +1,28 @@
 package me.omega.baseline;
 
+import me.omega.baseline.loggers.BaselineLogger;
+
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public enum LogType {
-    UNKNOWN((clazz) -> false),
-    STRING((clazz) -> clazz.equals(String.class)),
-    NUMBER(LogType::isNumeric),
-    BOOLEAN(LogType::isBoolean),
-    ENUM(Class::isEnum),
+    UNKNOWN((clazz) -> false, (logger, value) -> {}),
+    STRING((clazz) -> clazz.equals(String.class), BaselineLogger::logString),
+    NUMBER(LogType::isNumeric, BaselineLogger::logNumber),
+    BOOLEAN(LogType::isBoolean, BaselineLogger::logBoolean),
+    ENUM(Class::isEnum, BaselineLogger::logEnum),
     ;
 
     private final Function<Class<?>, Boolean> checker;
+    private final BiConsumer<BaselineLogger, LoggedValue<?>> logger;
 
-    LogType(Function<Class<?>, Boolean> checker) {
+    LogType(Function<Class<?>, Boolean> checker, BiConsumer<BaselineLogger, LoggedValue<?>> logger) {
         this.checker = checker;
+        this.logger = logger;
+    }
+
+    void log(BaselineLogger logger, LoggedValue<?> value) {
+        this.logger.accept(logger, value);
     }
 
     public static <T> LogType fromObject(T object) {
