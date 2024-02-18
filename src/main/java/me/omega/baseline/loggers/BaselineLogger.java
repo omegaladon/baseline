@@ -7,7 +7,7 @@ public interface BaselineLogger {
     /**
      * Code called when Baseline needs to log a message. For example:
      * <pre>
-     *     System.out.println(message);
+     *     System.out.println(...);
      * </pre>
      */
     default void log(LoggedValue<?> value) {};
