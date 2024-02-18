@@ -1,9 +1,5 @@
-package me.omega.baseline.value;
+package me.omega.baseline;
 
-import me.omega.baseline.Log;
-import me.omega.baseline.LoggedClass;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,24 +9,17 @@ import java.util.function.Supplier;
 public class LoggedValue<T> {
 
     public final LoggedClass loggedClass;
-    public final Field field;
+    private final String name;
     public final Log log;
     public final Supplier<T> getter;
 
     public LoggedValue parent;
 
-    public LoggedValue(LoggedClass loggedClass, Field field, Log log) {
+    public LoggedValue(LoggedClass loggedClass, String name, Log log, Supplier<T> getter) {
         this.loggedClass = loggedClass;
-        this.field = field;
+        this.name = name;
         this.log = log;
-
-        this.getter = () -> {
-            try {
-                return (T) field.get(loggedClass);
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        };
+        this.getter = getter;
     }
 
     public T getValue() {
@@ -38,7 +27,7 @@ public class LoggedValue<T> {
     }
 
     public String getName() {
-        if (Objects.equals(log.name(), "")) return field.getName();
+        if (Objects.equals(log.name(), "")) return name;
         return log.name();
     }
 
@@ -54,6 +43,7 @@ public class LoggedValue<T> {
     public String getParentString() {
         return getParentString(list -> {
             var builder = new StringBuilder();
+            builder.append("Root -> ");
             for (int i = list.size() - 1; i >= 0; i--) {
                 var value = list.get(i);
                 builder.append(value.getName());

@@ -5,10 +5,10 @@ import me.omega.baseline.loggers.SystemOutLogger;
 import java.time.Duration;
 
 public class Container implements LoggedClass {
-    @Log
+//    @Log
     private double value;
 
-    @Log(name = "test/NamedValue")
+//    @Log(name = "test/NamedValue")
     private double namedValue;
 
     @Log(name = "holder")
@@ -25,6 +25,6 @@ public class Container implements LoggedClass {
         Baseline.setDebug(true);
         Baseline.setInterval(Duration.ofSeconds(1));
         new Container();
-        Baseline.start("me.omega.baseline");
+        Baseline.start();
     }
 }

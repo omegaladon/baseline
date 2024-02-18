@@ -1,6 +1,6 @@
 package me.omega.baseline.loggers;
 
-import me.omega.baseline.value.LoggedValue;
+import me.omega.baseline.LoggedValue;
 
 public interface BaselineLogger {
 
@@ -10,6 +10,6 @@ public interface BaselineLogger {
      *     System.out.println(message);
      * </pre>
      */
-    abstract void log(LoggedValue<?> value, String extra);
+    void log(LoggedValue<?> value, String extra);
 
 }
