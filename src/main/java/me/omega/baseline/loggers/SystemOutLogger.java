@@ -6,7 +6,7 @@ public class SystemOutLogger implements BaselineLogger {
 
     @Override
     public void log(LoggedValue<?> value) {
-        System.out.println(value.getParentString() + ": " + value.getName() + " = " + value.getValue() + " " + extra);
+        System.out.println(value.getParentString() + ": " + value.getName() + " = " + value.getValue());
     }
 
 }

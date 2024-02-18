@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 public enum LogType {
     UNKNOWN((clazz) -> false),
-    LOGGED_CLASS(LoggedClass.class::isAssignableFrom),
     STRING((clazz) -> clazz.equals(String.class)),
     NUMBER(LogType::isNumeric),
     BOOLEAN(LogType::isBoolean),
