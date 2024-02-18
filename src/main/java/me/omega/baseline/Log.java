@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Log {
     String name() default "";
+
     double baseline() default 0.0;
+
     double allowedDeviation() default 0.0;
 }

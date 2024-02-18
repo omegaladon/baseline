@@ -110,7 +110,7 @@ public class Baseline {
     }
 
     private static LoggedValue<?> addValue(Log log, String name, LoggedClass loggedClass,
-                                          Supplier<?> getter) throws IllegalStateException {
+                                           Supplier<?> getter) throws IllegalStateException {
         var value = new LoggedValue<>(loggedClass, name, log, getter);
         values.add(value);
         return value;
